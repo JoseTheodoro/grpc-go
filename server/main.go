@@ -6,6 +6,7 @@ import (
 	"net"
 
 	pb "github.com/JoseTheodoro/grpc-go/person"
+	"github.com/JoseTheodoro/grpc-go/services"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -22,6 +23,22 @@ func (s *Server) GetPerson(ctx context.Context, in *pb.PersonRequest) (*pb.Perso
 	}
 	return &pb.PersonResponse{
 		Person: p,
+	}, nil
+}
+
+func (s *Server) CreatePerson(ctx context.Context, input *pb.PersonRequest) (*pb.PersonResponse, error) {
+
+	p := services.CreatePerson(input)
+
+	pbb := &pb.Person{
+		ID:   p.ID,
+		Name: p.Name,
+		Age:  p.Age,
+		City: p.City,
+	}
+
+	return &pb.PersonResponse{
+		Person: pbb,
 	}, nil
 }
 
